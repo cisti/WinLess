@@ -10,31 +10,36 @@ namespace WinLess
     {
         public Settings()
         {
-            DirectoryList = new DirectoryList();
-            DefaultMinify = true;
-            CompileOnSave = true;
-            ShowSuccessMessages = false;
-            StartWithWindows = true;
-            StartMinified = false;
-            UseGloballyInstalledLess = false;
+            this.DirectoryList = new DirectoryList();
+            this.DefaultMinify = true;
+            this.CompileOnSave = true;
+            this.ShowSuccessMessages = false;
+            this.StartWithWindows = true;
+            this.StartMinified = false;
+            this.UseGloballyInstalledLess = false;
         }
 
         public DirectoryList DirectoryList { get; set; }
+
         public bool DefaultMinify { get; set; }
+
         public bool CompileOnSave { get; set; }
+
         public bool ShowSuccessMessages { get; set; }
+
         public bool StartMinified { get; set; }
+
         public bool UseGloballyInstalledLess { get; set; }
 
         private bool startWithWindows;
 
         public bool StartWithWindows
         {
-            get => startWithWindows;
+            get => this.startWithWindows;
             set
             {
-                startWithWindows = value;
-                ApplyStartWithWindows();
+                this.startWithWindows = value;
+                this.ApplyStartWithWindows();
             }
         }
 
@@ -43,11 +48,11 @@ namespace WinLess
             const string keyName = "WinLess";
             string assemblyLocation = Application.ExecutablePath;
 
-            if (StartWithWindows && !AutoStartUtil.IsAutoStartEnabled(keyName, assemblyLocation))
+            if (this.StartWithWindows && !AutoStartUtil.IsAutoStartEnabled(keyName, assemblyLocation))
             {
                 AutoStartUtil.SetAutoStart(keyName, assemblyLocation);
             }
-            else if (!StartWithWindows && AutoStartUtil.IsAutoStartEnabled(keyName, assemblyLocation))
+            else if (!this.StartWithWindows && AutoStartUtil.IsAutoStartEnabled(keyName, assemblyLocation))
             {
                 AutoStartUtil.UnSetAutoStart(keyName);
             }

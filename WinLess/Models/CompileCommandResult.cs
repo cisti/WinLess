@@ -9,14 +9,6 @@
             this.ResultText = result.ResultText;
         }
 
-        #region Properties
-
-        public string FullPath
-        {
-            get;
-            set;
-        }
-
-        #endregion Properties
+        public string FullPath { get; set; }
     }
 }

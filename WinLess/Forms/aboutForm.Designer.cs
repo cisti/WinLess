@@ -49,9 +49,11 @@
             this.versionGroupBox.Controls.Add(this.lessjsLabel);
             this.versionGroupBox.Controls.Add(this.winlessVersionLabel);
             this.versionGroupBox.Controls.Add(this.winlessLabel);
-            this.versionGroupBox.Location = new System.Drawing.Point(12, 12);
+            this.versionGroupBox.Location = new System.Drawing.Point(14, 14);
+            this.versionGroupBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.versionGroupBox.Name = "versionGroupBox";
-            this.versionGroupBox.Size = new System.Drawing.Size(290, 59);
+            this.versionGroupBox.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.versionGroupBox.Size = new System.Drawing.Size(338, 68);
             this.versionGroupBox.TabIndex = 1;
             this.versionGroupBox.TabStop = false;
             this.versionGroupBox.Text = "Version info";
@@ -59,36 +61,40 @@
             // lessjsVersionLabel
             // 
             this.lessjsVersionLabel.AutoSize = true;
-            this.lessjsVersionLabel.Location = new System.Drawing.Point(104, 37);
+            this.lessjsVersionLabel.Location = new System.Drawing.Point(121, 43);
+            this.lessjsVersionLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lessjsVersionLabel.Name = "lessjsVersionLabel";
-            this.lessjsVersionLabel.Size = new System.Drawing.Size(41, 13);
+            this.lessjsVersionLabel.Size = new System.Drawing.Size(45, 15);
             this.lessjsVersionLabel.TabIndex = 3;
             this.lessjsVersionLabel.Text = "version";
             // 
             // lessjsLabel
             // 
             this.lessjsLabel.AutoSize = true;
-            this.lessjsLabel.Location = new System.Drawing.Point(7, 37);
+            this.lessjsLabel.Location = new System.Drawing.Point(8, 43);
+            this.lessjsLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lessjsLabel.Name = "lessjsLabel";
-            this.lessjsLabel.Size = new System.Drawing.Size(84, 13);
+            this.lessjsLabel.Size = new System.Drawing.Size(86, 15);
             this.lessjsLabel.TabIndex = 2;
             this.lessjsLabel.Text = "LESS.js version:";
             // 
             // winlessVersionLabel
             // 
             this.winlessVersionLabel.AutoSize = true;
-            this.winlessVersionLabel.Location = new System.Drawing.Point(104, 20);
+            this.winlessVersionLabel.Location = new System.Drawing.Point(121, 23);
+            this.winlessVersionLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.winlessVersionLabel.Name = "winlessVersionLabel";
-            this.winlessVersionLabel.Size = new System.Drawing.Size(41, 13);
+            this.winlessVersionLabel.Size = new System.Drawing.Size(45, 15);
             this.winlessVersionLabel.TabIndex = 1;
             this.winlessVersionLabel.Text = "version";
             // 
             // winlessLabel
             // 
             this.winlessLabel.AutoSize = true;
-            this.winlessLabel.Location = new System.Drawing.Point(7, 20);
+            this.winlessLabel.Location = new System.Drawing.Point(8, 23);
+            this.winlessLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.winlessLabel.Name = "winlessLabel";
-            this.winlessLabel.Size = new System.Drawing.Size(91, 13);
+            this.winlessLabel.Size = new System.Drawing.Size(97, 15);
             this.winlessLabel.TabIndex = 0;
             this.winlessLabel.Text = "WinLess version: ";
             // 
@@ -98,9 +104,11 @@
             this.creditsGroupBox.Controls.Add(this.authorNameLabel);
             this.creditsGroupBox.Controls.Add(this.graphicalDesignLabel);
             this.creditsGroupBox.Controls.Add(this.authorLabel);
-            this.creditsGroupBox.Location = new System.Drawing.Point(13, 78);
+            this.creditsGroupBox.Location = new System.Drawing.Point(15, 90);
+            this.creditsGroupBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.creditsGroupBox.Name = "creditsGroupBox";
-            this.creditsGroupBox.Size = new System.Drawing.Size(289, 66);
+            this.creditsGroupBox.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.creditsGroupBox.Size = new System.Drawing.Size(337, 76);
             this.creditsGroupBox.TabIndex = 2;
             this.creditsGroupBox.TabStop = false;
             this.creditsGroupBox.Text = "Credits";
@@ -108,48 +116,54 @@
             // graphicalDesignNameLabel
             // 
             this.graphicalDesignNameLabel.AutoSize = true;
-            this.graphicalDesignNameLabel.Location = new System.Drawing.Point(103, 37);
+            this.graphicalDesignNameLabel.Location = new System.Drawing.Point(120, 43);
+            this.graphicalDesignNameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.graphicalDesignNameLabel.Name = "graphicalDesignNameLabel";
-            this.graphicalDesignNameLabel.Size = new System.Drawing.Size(105, 13);
+            this.graphicalDesignNameLabel.Size = new System.Drawing.Size(116, 15);
             this.graphicalDesignNameLabel.TabIndex = 3;
             this.graphicalDesignNameLabel.Text = "Elmar Kouwenhoven";
             // 
             // authorNameLabel
             // 
             this.authorNameLabel.AutoSize = true;
-            this.authorNameLabel.Location = new System.Drawing.Point(103, 20);
+            this.authorNameLabel.Location = new System.Drawing.Point(120, 23);
+            this.authorNameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.authorNameLabel.Name = "authorNameLabel";
-            this.authorNameLabel.Size = new System.Drawing.Size(80, 13);
+            this.authorNameLabel.Size = new System.Drawing.Size(88, 15);
             this.authorNameLabel.TabIndex = 2;
             this.authorNameLabel.Text = "Mark Lagendijk";
             // 
             // graphicalDesignLabel
             // 
             this.graphicalDesignLabel.AutoSize = true;
-            this.graphicalDesignLabel.Location = new System.Drawing.Point(6, 37);
+            this.graphicalDesignLabel.Location = new System.Drawing.Point(7, 43);
+            this.graphicalDesignLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.graphicalDesignLabel.Name = "graphicalDesignLabel";
-            this.graphicalDesignLabel.Size = new System.Drawing.Size(89, 13);
+            this.graphicalDesignLabel.Size = new System.Drawing.Size(98, 15);
             this.graphicalDesignLabel.TabIndex = 1;
             this.graphicalDesignLabel.Text = "Graphical design:";
             // 
             // authorLabel
             // 
             this.authorLabel.AutoSize = true;
-            this.authorLabel.Location = new System.Drawing.Point(6, 20);
+            this.authorLabel.Location = new System.Drawing.Point(7, 23);
+            this.authorLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.authorLabel.Name = "authorLabel";
-            this.authorLabel.Size = new System.Drawing.Size(41, 13);
+            this.authorLabel.Size = new System.Drawing.Size(47, 15);
             this.authorLabel.TabIndex = 0;
             this.authorLabel.Text = "Author:";
             // 
-            // aboutForm
+            // AboutForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(313, 154);
+            this.ClientSize = new System.Drawing.Size(365, 178);
             this.Controls.Add(this.creditsGroupBox);
             this.Controls.Add(this.versionGroupBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "aboutForm";
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.Name = "AboutForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About";
             this.versionGroupBox.ResumeLayout(false);
             this.versionGroupBox.PerformLayout();

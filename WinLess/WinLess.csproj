@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="NDesk.Options.Core" Version="1.2.5" />
-    <PackageReference Include="Ookii.Dialogs.Wpf.NETCore" Version="2.0.0" />
     <PackageReference Include="WinLess.lessc" Version="1.0.14" />
   </ItemGroup>
 

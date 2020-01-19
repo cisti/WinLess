@@ -15,26 +15,27 @@ namespace WinLess.Models
 
         public DirectoryList()
         {
-            Directories = new List<Directory>();
+            this.Directories = new List<Directory>();
         }
 
         public void Initialize()
         {
-            RemoveDeletedDirectories();
-            CheckAllFilesForImports();
-            StartWatchers();
+            this.RemoveDeletedDirectories();
+            this.CheckAllFilesForImports();
+            this.StartWatchers();
         }
 
         public Directory AddDirectory(string path)
         {
-            Directory directory = GetDirectory(path);
+            Directory directory = this.GetDirectory(path);
+
             if (directory == null)
             {
                 directory = new Directory(path);
-                Directories.Add(directory);
-                AddWatcher(directory);
+                this.Directories.Add(directory);
+                this.AddWatcher(directory);
                 Program.Settings.SaveSettings();
-                CheckAllFilesForImports();
+                this.CheckAllFilesForImports();
             }
 
             return directory;
@@ -42,16 +43,16 @@ namespace WinLess.Models
 
         public void RemoveDirectory(Directory directory)
         {
-            Directories.Remove(directory);
-            RemoveWatcher(directory.FullPath);
+            this.Directories.Remove(directory);
+            this.RemoveWatcher(directory.FullPath);
             Program.Settings.SaveSettings();
-            CheckAllFilesForImports();
+            this.CheckAllFilesForImports();
         }
 
         public void RemoveDeletedDirectories()
         {
             var removedDirectories = new List<Directory>();
-            foreach (Directory directory in Directories)
+            foreach (Directory directory in this.Directories)
             {
                 if (!System.IO.Directory.Exists(directory.FullPath))
                 {
@@ -60,28 +61,28 @@ namespace WinLess.Models
             }
             foreach (Directory directory in removedDirectories)
             {
-                RemoveDirectory(directory);
+                this.RemoveDirectory(directory);
             }
         }
 
         public void ClearDirectories()
         {
-            var allDirectories = new List<Directory>(Directories);
+            var allDirectories = new List<Directory>(this.Directories);
 
             foreach (Directory directory in allDirectories)
             {
-                Directories.Remove(directory);
-                RemoveWatcher(directory.FullPath);
+                this.Directories.Remove(directory);
+                this.RemoveWatcher(directory.FullPath);
             }
 
             Program.Settings.SaveSettings();
 
-            CheckAllFilesForImports();
+            this.CheckAllFilesForImports();
         }
 
         public Directory GetDirectory(string path)
         {
-            foreach (Directory directory in Directories)
+            foreach (Directory directory in this.Directories)
             {
                 if (path == directory.FullPath || (path.StartsWith(directory.FullPath)))
                 {
@@ -94,7 +95,7 @@ namespace WinLess.Models
 
         public File GetFile(string path)
         {
-            foreach (Directory directory in Directories)
+            foreach (Directory directory in this.Directories)
             {
                 File file = directory.Files.Find(f => string.Compare(f.FullPath, path, StringComparison.InvariantCultureIgnoreCase) == 0);
 
@@ -126,7 +127,7 @@ namespace WinLess.Models
 
         public void StartWatchers()
         {
-            foreach (Directory directory in Directories)
+            foreach (Directory directory in this.Directories)
             {
                 this.AddWatcher(directory);
             }
@@ -138,9 +139,9 @@ namespace WinLess.Models
             {
                 if (System.IO.Directory.Exists(directory.FullPath))
                 {
-                    if (fileSystemWatchers == null)
+                    if (this.fileSystemWatchers == null)
                     {
-                        fileSystemWatchers = new List<FileSystemWatcher>();
+                        this.fileSystemWatchers = new List<FileSystemWatcher>();
                     }
 
                     var fileSystemWatcher = new FileSystemWatcher
@@ -151,10 +152,10 @@ namespace WinLess.Models
                         NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.LastAccess | NotifyFilters.FileName |
                                        NotifyFilters.Size | NotifyFilters.CreationTime | NotifyFilters.Attributes
                     };
-                    fileSystemWatcher.Changed += FileSystemWatcher_Changed;
+                    fileSystemWatcher.Changed += this.FileSystemWatcher_Changed;
                     fileSystemWatcher.EnableRaisingEvents = true;
 
-                    fileSystemWatchers.Add(fileSystemWatcher);
+                    this.fileSystemWatchers.Add(fileSystemWatcher);
                 }
             }
             catch (Exception e)
@@ -167,17 +168,17 @@ namespace WinLess.Models
         {
             try
             {
-                if (fileSystemWatchers == null)
+                if (this.fileSystemWatchers == null)
                 {
                     return;
                 }
 
-                foreach (FileSystemWatcher fileSystemWatcher in fileSystemWatchers)
+                foreach (FileSystemWatcher fileSystemWatcher in this.fileSystemWatchers)
                 {
                     if (fileSystemWatcher.Path == path)
                     {
                         fileSystemWatcher.EnableRaisingEvents = false;
-                        fileSystemWatchers.Remove(fileSystemWatcher);
+                        this.fileSystemWatchers.Remove(fileSystemWatcher);
                         break;
                     }
                 }
@@ -190,22 +191,22 @@ namespace WinLess.Models
 
         private void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
         {
-            if (Program.Settings.CompileOnSave && IsNewFileChange(e) && IsLessFile(e.FullPath))
+            if (Program.Settings.CompileOnSave && this.IsNewFileChange(e) && this.IsLessFile(e.FullPath))
             {
                 File file = Program.Settings.DirectoryList.GetFile(e.FullPath);
 
                 if (file != null)
                 {
                     file.Compile();
-                    previousFileChangedPath = file.FullPath;
-                    previousFileChangedTime = DateTime.Now;
+                    this.previousFileChangedPath = file.FullPath;
+                    this.previousFileChangedTime = DateTime.Now;
                 }
             }
         }
 
         private bool IsNewFileChange(FileSystemEventArgs e)
         {
-            return previousFileChangedPath != e.FullPath || DateTime.Now - previousFileChangedTime > new TimeSpan(0, 0, 1);
+            return this.previousFileChangedPath != e.FullPath || DateTime.Now - this.previousFileChangedTime > new TimeSpan(0, 0, 1);
         }
 
         private bool IsLessFile(string path)

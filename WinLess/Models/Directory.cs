@@ -14,8 +14,8 @@ namespace WinLess.Models
 
         public Directory(string path)
         {
-            FullPath = path;
-            LoadFiles();
+            this.FullPath = path;
+            this.LoadFiles();
         }
 
         #endregion Constructor
@@ -26,22 +26,18 @@ namespace WinLess.Models
 
         public string FullPath
         {
-            get => fullPath;
+            get => this.fullPath;
             set
             {
                 var directoryInfo = new DirectoryInfo(value);
                 if (directoryInfo.Exists)
                 {
-                    fullPath = directoryInfo.FullName;
+                    this.fullPath = directoryInfo.FullName;
                 }
             }
         }
 
-        public List<File> Files
-        {
-            get;
-            set;
-        }
+        public List<File> Files { get; set; }
 
         #endregion Properties
 
@@ -49,14 +45,14 @@ namespace WinLess.Models
 
         public void LoadFiles()
         {
-            Files = new List<File>();
+            this.Files = new List<File>();
             this.Refresh();
         }
 
         public void Refresh()
         {
             var removedFiles = new List<File>();
-            foreach (File file in Files)
+            foreach (File file in this.Files)
             {
                 if (!System.IO.File.Exists(file.FullPath))
                 {
@@ -65,16 +61,16 @@ namespace WinLess.Models
             }
             foreach (File file in removedFiles)
             {
-                Files.Remove(file);
+                this.Files.Remove(file);
             }
 
-            AddFiles(new DirectoryInfo(this.FullPath));
+            this.AddFiles(new DirectoryInfo(this.FullPath));
         }
 
         public bool ContainsFile(string fullPath)
         {
             var result = false;
-            foreach (File file in Files)
+            foreach (File file in this.Files)
             {
                 if (string.Compare(file.FullPath, fullPath, StringComparison.InvariantCultureIgnoreCase) == 0)
                 {
@@ -87,7 +83,7 @@ namespace WinLess.Models
 
         public override string ToString()
         {
-            return FullPath;
+            return this.FullPath;
         }
 
         #endregion Public Methods
@@ -105,17 +101,20 @@ namespace WinLess.Models
                         (string.Compare(file.Extension, ".css", StringComparison.InvariantCultureIgnoreCase) == 0) && file.Name.Contains(".less")
                        ) && !this.ContainsFile(file.FullName))
                     {
-                        Files.Add(new File(this, file.FullName));
+                        this.Files.Add(new File(this, file.FullName));
                     }
                 }
 
                 DirectoryInfo[] subDirectories = directoryInfo.GetDirectories();
                 foreach (DirectoryInfo subDirectoryInfo in subDirectories)
                 {
-                    AddFiles(subDirectoryInfo);
+                    this.AddFiles(subDirectoryInfo);
                 }
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
         }
 
         #endregion Private Methods

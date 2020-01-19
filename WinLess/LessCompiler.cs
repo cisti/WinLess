@@ -82,7 +82,7 @@ namespace WinLess
 
             try
             {
-                var startInfo = new ProcessStartInfo()
+                var startInfo = new ProcessStartInfo
                 {
                     WorkingDirectory = Application.StartupPath,
                     FileName = fileName,

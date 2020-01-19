@@ -6,9 +6,10 @@ namespace WinLess
     {
         public AboutForm()
         {
-            InitializeComponent();
-            winlessVersionLabel.Text = GetApplicationVersion();
-            lessjsVersionLabel.Text = LessCompiler.GetCurrentCompilerVersion().ToString();
+            this.InitializeComponent();
+
+            this.winlessVersionLabel.Text = this.GetApplicationVersion();
+            this.lessjsVersionLabel.Text = LessCompiler.GetCurrentCompilerVersion().ToString();
         }
 
         private string GetApplicationVersion()

@@ -16,64 +16,44 @@ namespace WinLess.Models
             this.ParentFiles = new List<File>();
         }
 
-        public File(Models.Directory directory, string fullPath)
+        public File(Directory directory, string fullPath)
         {
             this.FullPath = fullPath;
             this.ProjectDirectoryPath = directory.FullPath;
             this.Minify = Program.Settings.DefaultMinify;
             this.Enabled = true;
-            this.OutputPath = GetInitialOutputPath();
+            this.OutputPath = this.GetInitialOutputPath();
             this.ParentFiles = new List<File>();
-            CheckForImports();
+            this.CheckForImports();
         }
 
         #endregion Constructor
 
         #region Properties
 
-        public string FullPath
-        {
-            get;
-            set;
-        }
+        public string FullPath { get; set; }
 
         public string DirectoryPath => Path.GetDirectoryName(this.FullPath);
 
-        public string ProjectDirectoryPath
-        {
-            get;
-            set;
-        }
+        public string ProjectDirectoryPath { get; set; }
 
-        public string RelativePath => FullPath.Replace(ProjectDirectoryPath, "").Substring(1);
+        public string RelativePath => this.FullPath.Replace(this.ProjectDirectoryPath, "").Substring(1);
 
-        public string OutputPath
-        {
-            get;
-            set;
-        }
+        public string OutputPath { get; set; }
 
         public string RelativeOutputPath
         {
             get
             {
-                var outputPathUri = new Uri(OutputPath);
-                var projectDirPathUri = new Uri($@"{ProjectDirectoryPath}\");
+                var outputPathUri = new Uri(this.OutputPath);
+                var projectDirPathUri = new Uri($@"{this.ProjectDirectoryPath}\");
                 return Uri.UnescapeDataString(projectDirPathUri.MakeRelativeUri(outputPathUri).ToString()).Replace("/", "\\");
             }
         }
 
-        public bool Minify
-        {
-            get;
-            set;
-        }
+        public bool Minify { get; set; }
 
-        public bool Enabled
-        {
-            get;
-            set;
-        }
+        public bool Enabled { get; set; }
 
         [XmlIgnore]
         public List<File> ParentFiles
@@ -113,7 +93,7 @@ namespace WinLess.Models
             }
 
             //Recheck the imports of the current file
-            CheckForImports();
+            this.CheckForImports();
         }
 
         #endregion Public Methods
@@ -122,7 +102,7 @@ namespace WinLess.Models
 
         private string GetInitialOutputPath()
         {
-            return $"{GetInitialOutputDir()}{GetInitialOutputFileName()}";
+            return $"{this.GetInitialOutputDir()}{this.GetInitialOutputFileName()}";
         }
 
         private string GetInitialOutputDir()

@@ -6,28 +6,14 @@ namespace WinLess.Models
     {
         public CommandResult()
         {
-            IsSuccess = false;
-            ResultText = "";
+            this.IsSuccess = false;
+            this.ResultText = string.Empty;
         }
 
-        public string TimeString => Time.ToLongTimeString();
+        public DateTime Time { get; set; }
 
-        public DateTime Time
-        {
-            get;
-            set;
-        }
+        public bool IsSuccess { get; set; }
 
-        public bool IsSuccess
-        {
-            get;
-            set;
-        }
-
-        public string ResultText
-        {
-            get;
-            set;
-        }
+        public string ResultText { get; set; }
     }
 }
