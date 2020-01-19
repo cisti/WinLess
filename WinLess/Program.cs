@@ -21,11 +21,10 @@ namespace WinLess
                 return;
             }
 
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            var controller = new SingleInstanceController();
-            controller.Run(args);
+            Application.Run(new MainForm());
         }
     }
 }
