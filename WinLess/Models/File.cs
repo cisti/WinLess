@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
@@ -16,7 +15,7 @@ namespace WinLess.Models
         {
             this.ParentFiles = new List<File>();
         }
-        
+
         public File(Models.Directory directory, string fullPath)
         {
             this.FullPath = fullPath;
@@ -28,7 +27,7 @@ namespace WinLess.Models
             CheckForImports();
         }
 
-        #endregion
+        #endregion Constructor
 
         #region Properties
 
@@ -38,13 +37,7 @@ namespace WinLess.Models
             set;
         }
 
-        public string DirectoryPath
-        {
-            get
-            {
-                return Path.GetDirectoryName(this.FullPath);
-            }
-        }
+        public string DirectoryPath => Path.GetDirectoryName(this.FullPath);
 
         public string ProjectDirectoryPath
         {
@@ -52,14 +45,7 @@ namespace WinLess.Models
             set;
         }
 
-        public string RelativePath
-        {
-            get
-            {
-                return FullPath.Replace(ProjectDirectoryPath, "").Substring(1); ;
-            }
-        }
-
+        public string RelativePath => FullPath.Replace(ProjectDirectoryPath, "").Substring(1);
 
         public string OutputPath
         {
@@ -71,8 +57,8 @@ namespace WinLess.Models
         {
             get
             {
-                Uri outputPathUri = new Uri(OutputPath);
-                Uri projectDirPathUri = new Uri(string.Format("{0}\\", ProjectDirectoryPath));
+                var outputPathUri = new Uri(OutputPath);
+                var projectDirPathUri = new Uri($@"{ProjectDirectoryPath}\");
                 return Uri.UnescapeDataString(projectDirPathUri.MakeRelativeUri(outputPathUri).ToString()).Replace("/", "\\");
             }
         }
@@ -95,7 +81,7 @@ namespace WinLess.Models
             get; set;
         }
 
-        #endregion
+        #endregion Properties
 
         #region Public Methods
 
@@ -105,10 +91,10 @@ namespace WinLess.Models
             foreach (string importPath in importPaths)
             {
                 File importFile = Program.Settings.DirectoryList.GetFile(importPath);
-                if(importFile != null && importFile.ParentFiles.Find(f => string.Compare(f.FullPath, this.FullPath, StringComparison.InvariantCultureIgnoreCase) == 0) == null)
+                if (importFile != null && importFile.ParentFiles.Find(f => string.Compare(f.FullPath, this.FullPath, StringComparison.InvariantCultureIgnoreCase) == 0) == null)
                 {
                     importFile.ParentFiles.Add(this);
-                }  
+                }
             }
         }
 
@@ -130,39 +116,45 @@ namespace WinLess.Models
             CheckForImports();
         }
 
-        #endregion
+        #endregion Public Methods
 
         #region Private Methods
 
         private string GetInitialOutputPath()
-        {           
-            return string.Format("{0}{1}", GetInitialOuputDir(), GetInitialOuputFileName());
+        {
+            return $"{GetInitialOutputDir()}{GetInitialOutputFileName()}";
         }
 
-        private string GetInitialOuputDir()
+        private string GetInitialOutputDir()
         {
-            FileInfo fileInfo = new FileInfo(this.FullPath);
-            string directoryName = string.Format("{0}\\", fileInfo.DirectoryName);
-                       
-            if (directoryName.Contains("\\less\\")){
-                if (System.IO.Directory.Exists(directoryName.Replace("\\less\\", "\\css\\"))){
-                    return directoryName.Replace("\\less\\", "\\css\\");
+            var fileInfo = new FileInfo(this.FullPath);
+            string directoryName = $@"{fileInfo.DirectoryName}\";
+
+            if (directoryName.Contains(@"\less\"))
+            {
+                if (System.IO.Directory.Exists(directoryName.Replace(@"\less\", @"\css\")))
+                {
+                    return directoryName.Replace(@"\less\", @"\css\");
                 }
-                else if (System.IO.Directory.Exists(directoryName.Replace("\\less\\", "\\..\\css\\"))){
-                    return directoryName.Replace("\\less\\", "\\..\\css\\");
+
+                if (System.IO.Directory.Exists(directoryName.Replace(@"\less\", @"\..\css\")))
+                {
+                    return directoryName.Replace(@"\less\", @"\..\css\");
                 }
-                else if (System.IO.Directory.Exists(directoryName.Replace("\\less\\", "\\less\\css\\"))){
-                    return directoryName.Replace("\\less\\", "\\less\\css\\");
+
+                if (System.IO.Directory.Exists(directoryName.Replace(@"\less\", @"\less\css\")))
+                {
+                    return directoryName.Replace(@"\less\", @"\less\css\");
                 }
-            }       
-            
+            }
+
             //no matches, use same dir as the less file is in
             return directoryName;
         }
 
-        private string GetInitialOuputFileName()
+        private string GetInitialOutputFileName()
         {
-            FileInfo fileInfo = new FileInfo(this.FullPath);
+            var fileInfo = new FileInfo(this.FullPath);
             string fileName = fileInfo.Name.Replace(fileInfo.Extension, ".css");
             if (fileName.Contains(".less"))
             {
@@ -173,7 +165,7 @@ namespace WinLess.Models
 
         private List<string> GetLessImportPaths()
         {
-            List<string> lessImportPaths = new List<string>();
+            var lessImportPaths = new List<string>();
             string fileText = this.GetFileText();
             if (!string.IsNullOrEmpty(fileText))
             {
@@ -196,15 +188,16 @@ namespace WinLess.Models
                             if (!cssImportValue.EndsWith(".less.css", StringComparison.InvariantCultureIgnoreCase) &&
                                 !cssImportValue.EndsWith(".less", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                relativeImportPath = string.Format("{0}.less", relativeImportPath);
+                                relativeImportPath = $"{relativeImportPath}.less";
                             }
 
                             try
                             {
-                                string fullImportPath = Path.GetFullPath(string.Format("{0}\\{1}", this.DirectoryPath, relativeImportPath));
+                                string fullImportPath = Path.GetFullPath($"{this.DirectoryPath}\\{relativeImportPath}");
                                 lessImportPaths.Add(fullImportPath);
                             }
-                            catch { 
+                            catch
+                            {
                                 //invalid path, ignore this here
                             }
                         }
@@ -220,7 +213,7 @@ namespace WinLess.Models
             string fileText = null;
             try
             {
-                StreamReader streamReader = new StreamReader(this.FullPath);
+                var streamReader = new StreamReader(this.FullPath);
                 fileText = streamReader.ReadToEnd();
                 streamReader.Close();
             }
@@ -228,10 +221,10 @@ namespace WinLess.Models
             {
                 ExceptionHandler.LogException(e);
             }
-            
+
             return fileText;
         }
 
-        #endregion
+        #endregion Private Methods
     }
 }

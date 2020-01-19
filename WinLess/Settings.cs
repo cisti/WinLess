@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using System.Xml.Serialization;
 using System.Windows.Forms;
-using WinLess.Models;
 using WinLess.Helpers;
+using WinLess.Models;
 
 namespace WinLess
 {
@@ -30,11 +27,10 @@ namespace WinLess
         public bool UseGloballyInstalledLess { get; set; }
 
         private bool startWithWindows;
+
         public bool StartWithWindows
         {
-            get{
-                return startWithWindows;   
-            }
+            get => startWithWindows;
             set
             {
                 startWithWindows = value;
@@ -44,9 +40,9 @@ namespace WinLess
 
         private void ApplyStartWithWindows()
         {
-            string keyName = "WinLess";
+            const string keyName = "WinLess";
             string assemblyLocation = Application.ExecutablePath;
-            
+
             if (StartWithWindows && !AutoStartUtil.IsAutoStartEnabled(keyName, assemblyLocation))
             {
                 AutoStartUtil.SetAutoStart(keyName, assemblyLocation);
@@ -57,49 +53,57 @@ namespace WinLess
             }
         }
 
-        public void SaveSettings(){
-            string dataDir = string.Format("{0}\\data", Application.UserAppDataPath);
-            string settingsFilePath = string.Format("{0}\\settings.xml", dataDir);
-            
-            try {     
-                if (!System.IO.Directory.Exists(dataDir)) {
+        public void SaveSettings()
+        {
+            string dataDir = $"{Application.UserAppDataPath}\\data";
+            string settingsFilePath = $"{dataDir}\\settings.xml";
+
+            try
+            {
+                if (!System.IO.Directory.Exists(dataDir))
+                {
                     System.IO.Directory.CreateDirectory(dataDir);
                 }
             }
-            catch (Exception e) {
-                ExceptionHandler.ShowErrorMessage(string.Format("Error while trying to create data directory: {0}\n\nException message:\n{1}", dataDir, e.Message));
+            catch (Exception e)
+            {
+                ExceptionHandler.ShowErrorMessage($"Error while trying to create data directory: {dataDir}\n\nException message:\n{e.Message}");
             }
 
-            try {
+            try
+            {
                 TextWriter writer = new StreamWriter(settingsFilePath);
-                XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(this.GetType());
+                var serializer = new System.Xml.Serialization.XmlSerializer(this.GetType());
                 serializer.Serialize(writer, this);
                 writer.Close();
             }
-            catch (Exception e) {
-                ExceptionHandler.ShowErrorMessage(string.Format("Error while trying to save settings: {0}\n\nException message:\n{1}", settingsFilePath, e.Message));
+            catch (Exception e)
+            {
+                ExceptionHandler.ShowErrorMessage($"Error while trying to save settings: {settingsFilePath}\n\nException message:\n{e.Message}");
             }
         }
 
         public static Settings LoadSettings()
         {
-            string path = string.Format("{0}\\data\\settings.xml", Application.UserAppDataPath);
-            if (System.IO.File.Exists(path))
+            string path = $"{Application.UserAppDataPath}\\data\\settings.xml";
+
+            if (!System.IO.File.Exists(path))
             {
-                try
-                {
-                    TextReader reader = new StreamReader(path);
-                    XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(Settings));
-                    Settings settings = (Settings)serializer.Deserialize(reader);
-                    reader.Close();
-                    return settings;
-                }
-                catch
-                {
-                    return new Settings();
-                }
+                return new Settings();
             }
-            return new Settings();
+
+            try
+            {
+                TextReader reader = new StreamReader(path);
+                var serializer = new System.Xml.Serialization.XmlSerializer(typeof(Settings));
+                var settings = (Settings)serializer.Deserialize(reader);
+                reader.Close();
+                return settings;
+            }
+            catch
+            {
+                return new Settings();
+            }
         }
     }
 }

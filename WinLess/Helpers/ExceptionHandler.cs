@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 namespace WinLess.Helpers
 {
-    static class ExceptionHandler
+    internal static class ExceptionHandler
     {
         public static void ShowErrorMessage(string message)
         {
@@ -15,28 +13,29 @@ namespace WinLess.Helpers
 
         public static void ShowException(string message, Exception exception)
         {
-            ShowErrorMessage(String.Format("{0}\n\nException message:\n{1}", message, exception.Message));
+            ShowErrorMessage($@"{message}Exception message:{exception.Message}");
         }
 
         public static void LogErrorMessage(string message)
         {
             try
             {
-                string errorFile = string.Format("{0}\\data\\errors.txt", Application.CommonAppDataPath);
+                string errorFile = $@"{Application.CommonAppDataPath}\data\errors.txt";
                 TextWriter writer = File.AppendText(errorFile);
                 writer.WriteLine(message);
                 writer.Flush();
                 writer.Close();
             }
-            catch {
+            catch
+            {
                 // do nothing
             }
         }
 
         public static void LogException(Exception exception)
         {
-            string errrorMessage = String.Format("{0}\n\tMessage: {1}\n\tSource: {2}\n\tStackTrace: {3}", DateTime.Now, exception.Message, exception.Source, exception.StackTrace);
-            LogErrorMessage(errrorMessage);
+            string errorMessage = $@"{DateTime.Now} Message: {exception.Message} Source: {exception.Source} StackTrace: {exception.StackTrace}";
+            LogErrorMessage(errorMessage);
         }
     }
 }

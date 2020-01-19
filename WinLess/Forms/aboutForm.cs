@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.IO;
-using WinLess.Helpers;
-using System.Text.RegularExpressions;
+﻿using System.Windows.Forms;
 
 namespace WinLess
 {
-    public partial class aboutForm : Form
+    public partial class AboutForm : Form
     {
-        public aboutForm()
-        { 
+        public AboutForm()
+        {
             InitializeComponent();
             winlessVersionLabel.Text = GetApplicationVersion();
             lessjsVersionLabel.Text = LessCompiler.GetCurrentCompilerVersion().ToString();
@@ -23,9 +14,9 @@ namespace WinLess
         private string GetApplicationVersion()
         {
             string version = Application.ProductVersion;
-            
+
             // return the ProductVersion without the last '.0'
             return version.Substring(0, version.Length - 2);
-        }       
+        }
     }
 }

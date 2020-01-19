@@ -1,6 +1,6 @@
 ﻿namespace WinLess
 {
-    partial class aboutForm
+    partial class AboutForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(aboutForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
             this.versionGroupBox = new System.Windows.Forms.GroupBox();
             this.lessjsVersionLabel = new System.Windows.Forms.Label();
             this.lessjsLabel = new System.Windows.Forms.Label();

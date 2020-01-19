@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-using System.Windows.Forms;
-using System.IO;
-using WinLess.Models;
-using WinLess.Helpers;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using WinLess.Helpers;
+using WinLess.Models;
 
 namespace WinLess
 {
     public static class LessCompiler
-    {        
+    {
         public static void Compile(string lessFile, string cssFile, bool minify)
         {
             try
             {
                 CompileCommandResult compileResult = ExecuteCompileCommand(lessFile, cssFile, minify);
-                mainForm.ActiveOrInActiveMainForm.AddCompileResult(compileResult);
+                MainForm.ActiveOrInActiveMainForm.AddCompileResult(compileResult);
             }
             catch (Exception e)
             {
@@ -34,49 +31,55 @@ namespace WinLess
 
         private static Version GetVersionFromCommandResult(CommandResult result)
         {
-            if (result.IsSuccess)
+            if (!result.IsSuccess)
             {
-                Match versionMatch = Regex.Match(result.ResultText, "\\d+(?:\\.\\d+)+");
-                if (versionMatch.Groups.Count > 0)
-                {
-                    return new Version(versionMatch.Groups[0].Value);
-                }
+                return null;
             }
+
+            Match versionMatch = Regex.Match(result.ResultText, "\\d+(?:\\.\\d+)+");
+
+            if (versionMatch.Groups.Count > 0)
+            {
+                return new Version(versionMatch.Groups[0].Value);
+            }
+
             return null;
         }
 
         private static CommandResult ExecuteLessCommand(string arguments)
         {
-            string fileName = Program.Settings.UseGloballyInstalledLess
-                ? string.Format("{0}\\lessc.cmd", Application.StartupPath) 
-                : string.Format("{0}\\node_modules\\.bin\\lessc.cmd", Application.StartupPath);
+            string fileName = Program.Settings.UseGloballyInstalledLess ? $@"{Application.StartupPath}\lessc.cmd" : $@"{Application.StartupPath}\node_modules\.bin\lessc.cmd";
             return ExecuteCommand(fileName, arguments);
         }
 
         private static CompileCommandResult ExecuteCompileCommand(string lessFile, string cssFile, bool minify)
-        { 
+        {
             string arguments = CreateCompileArguments(lessFile, cssFile, minify);
 
-            CompileCommandResult result = new CompileCommandResult(ExecuteLessCommand(arguments));
-            result.FullPath = lessFile;
+            var result = new CompileCommandResult(ExecuteLessCommand(arguments))
+            {
+                FullPath = lessFile
+            };
 
             return result;
         }
 
         private static string CreateCompileArguments(string lessFile, string cssFile, bool minify)
         {
-        string arguments = string.Format("\"{0}\" \"{1}\" --no-color", lessFile, cssFile);
+            string arguments = $@"""{lessFile}"" ""{cssFile}"" --no-color";
+
             if (minify)
             {
-                arguments = string.Format("{0} --clean-css=\"--compatibility=ie8 --advanced\"", arguments);
+                arguments = $@"{arguments} --clean-css=""--compatibility=ie8 --advanced""";
             }
 
             return arguments;
         }
 
-        private static CommandResult ExecuteCommand(string fileName, string arguments){
-            var result = new CommandResult();            
-            
+        private static CommandResult ExecuteCommand(string fileName, string arguments)
+        {
+            var result = new CommandResult();
+
             try
             {
                 var startInfo = new ProcessStartInfo()
@@ -91,18 +94,21 @@ namespace WinLess
                     RedirectStandardOutput = true
                 };
 
-	            var process = new Process { StartInfo = startInfo };
-	            process.Start();
+                var process = new Process { StartInfo = startInfo };
+                process.Start();
 
                 string error = process.StandardError.ReadToEnd();
-                if(error.Length > 0){
+
+                if (error.Length > 0)
+                {
                     result.ResultText = error;
                 }
-                else{
+                else
+                {
                     result.ResultText = process.StandardOutput.ReadToEnd();
                     result.IsSuccess = true;
                 }
-                
+
                 process.WaitForExit();
                 result.Time = DateTime.Now;
 

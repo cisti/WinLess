@@ -1,23 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace WinLess.Models
 {
-    public class CommandResult {
+    public class CommandResult
+    {
         public CommandResult()
         {
             IsSuccess = false;
             ResultText = "";
         }
 
-        public string TimeString
-        {
-            get
-            {
-                return Time.ToLongTimeString();
-            }
-        }
+        public string TimeString => Time.ToLongTimeString();
 
         public DateTime Time
         {

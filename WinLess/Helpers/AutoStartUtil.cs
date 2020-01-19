@@ -7,14 +7,15 @@ namespace WinLess.Helpers
         private const string RUN_LOCATION = @"Software\Microsoft\Windows\CurrentVersion\Run";
 
         /// <summary>
-        /// Sets the autostart value for the assembly.
+        /// Sets the auto-start value for the assembly.
         /// </summary>
         /// <param name="keyName">Registry Key Name</param>
         /// <param name="assemblyLocation">Assembly location (e.g. Assembly.GetExecutingAssembly().Location)</param>
         public static void SetAutoStart(string keyName, string assemblyLocation)
         {
             RegistryKey key = Registry.CurrentUser.CreateSubKey(RUN_LOCATION);
-            key.SetValue(keyName, assemblyLocation);
+
+            key?.SetValue(keyName, assemblyLocation);
         }
 
         /// <summary>
@@ -25,14 +26,15 @@ namespace WinLess.Helpers
         public static bool IsAutoStartEnabled(string keyName, string assemblyLocation)
         {
             RegistryKey key = Registry.CurrentUser.OpenSubKey(RUN_LOCATION);
-            if (key == null)
-                return false;
 
-            string value = (string)key.GetValue(keyName);
+            var value = (string)key?.GetValue(keyName);
+
             if (value == null)
+            {
                 return false;
+            }
 
-            return (value == assemblyLocation);
+            return value == assemblyLocation;
         }
 
         /// <summary>
@@ -42,7 +44,8 @@ namespace WinLess.Helpers
         public static void UnSetAutoStart(string keyName)
         {
             RegistryKey key = Registry.CurrentUser.CreateSubKey(RUN_LOCATION);
-            key.DeleteValue(keyName);
+
+            key?.DeleteValue(keyName);
         }
     }
 }

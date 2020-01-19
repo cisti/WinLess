@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace WinLess
 {
-    public partial class settingsForm : Form
+    public partial class SettingsForm : Form
     {
-        public settingsForm()
+        public SettingsForm()
         {
             InitializeComponent();
-            loadSettings();
+            LoadSettings();
         }
 
-        private void loadSettings()
+        private void LoadSettings()
         {
             startWithWindowsCheckBox.Checked = Program.Settings.StartWithWindows;
             startMinimizedCheckBox.Checked = Program.Settings.StartMinified;
@@ -26,7 +21,7 @@ namespace WinLess
             showSuccessMessagesCheckbox.Checked = Program.Settings.ShowSuccessMessages;
         }
 
-        private void saveSettings()
+        private void SaveSettings()
         {
             Program.Settings.StartWithWindows = startWithWindowsCheckBox.Checked;
             Program.Settings.StartMinified = startMinimizedCheckBox.Checked;
@@ -44,7 +39,7 @@ namespace WinLess
 
         private void okButton_Click(object sender, EventArgs e)
         {
-            saveSettings();
+            SaveSettings();
             this.Close();
         }
     }

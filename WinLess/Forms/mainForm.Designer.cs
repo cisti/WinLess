@@ -1,6 +1,6 @@
 ﻿namespace WinLess
 {
-    partial class mainForm
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -33,7 +33,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.directoryBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.menu = new System.Windows.Forms.MenuStrip();
             this.menuItemFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,6 +77,7 @@
             this.fileContextMenuStrip.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.filesTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.directoryFilesSplitContainer)).BeginInit();
             this.directoryFilesSplitContainer.Panel1.SuspendLayout();
             this.directoryFilesSplitContainer.Panel2.SuspendLayout();
             this.directoryFilesSplitContainer.SuspendLayout();
@@ -144,7 +145,7 @@
             this.fileOpenFolderToolStripMenuItem,
             this.fileSelectOutputToolStripMenuItem});
             this.fileContextMenuStrip.Name = "fileContextMenuStrip";
-            this.fileContextMenuStrip.Size = new System.Drawing.Size(198, 92);
+            this.fileContextMenuStrip.Size = new System.Drawing.Size(198, 70);
             // 
             // openFiletoolStripMenuItem
             // 
@@ -491,8 +492,7 @@
             // 
             // logoPictureBox
             // 
-            this.logoPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.logoPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.logoPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("logoPictureBox.Image")));
             this.logoPictureBox.Location = new System.Drawing.Point(0, 402);
             this.logoPictureBox.Name = "logoPictureBox";
@@ -510,8 +510,9 @@
             this.Controls.Add(this.logoPictureBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menu;
-            this.Name = "mainForm";
-            this.Text = "WinLess - Windows GUI for less.js";
+            this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "WinLess Core - Windows GUI for less.js";
             this.Activated += new System.EventHandler(this.mainForm_Activated);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.mainForm_FormClosed);
             this.Load += new System.EventHandler(this.mainForm_Load);
@@ -525,6 +526,7 @@
             this.filesTabPage.ResumeLayout(false);
             this.directoryFilesSplitContainer.Panel1.ResumeLayout(false);
             this.directoryFilesSplitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.directoryFilesSplitContainer)).EndInit();
             this.directoryFilesSplitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.filesDataGridView)).EndInit();
             this.compilerTabPage.ResumeLayout(false);

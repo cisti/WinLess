@@ -1,37 +1,31 @@
-﻿using System;
+﻿using Ookii.Dialogs.Wpf;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.IO;
 using System.Diagnostics;
-using WinLess.Models;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 using WinLess.Helpers;
-using Ookii.Dialogs.Wpf;
+using WinLess.Models;
+using File = WinLess.Models.File;
 
 namespace WinLess
 {
-    public partial class mainForm : Form
+    public partial class MainForm : Form
     {
-        private static mainForm activeOrInActiveMainForm = null;
-        public static mainForm ActiveOrInActiveMainForm
-        {
-            get
-            {
-                return activeOrInActiveMainForm;
-            }
-        }
-        
-        private delegate void AddCompileResultDelegate(Models.CompileCommandResult result);
+        private static MainForm activeOrInActiveMainForm = null;
+
+        public static MainForm ActiveOrInActiveMainForm => activeOrInActiveMainForm;
+
+        private delegate void AddCompileResultDelegate(CompileCommandResult result);
+
         private bool finishedLoading;
-        private VistaFolderBrowserDialog folderBrowserDialog;
-        private VistaSaveFileDialog outputFileDialog;
+        private readonly VistaFolderBrowserDialog folderBrowserDialog;
+        private readonly VistaSaveFileDialog outputFileDialog;
 
         #region mainForm init and shutdown
 
-        public mainForm()
+        public MainForm()
         {
             try
             {
@@ -44,12 +38,12 @@ namespace WinLess
                 InitializeComponent();
                 initFilesDataGridViewCheckAllCheckBox();
                 foldersListBox.DataSource = Program.Settings.DirectoryList.Directories;
-                compileResultsDataGridView.DataSource = new List<Models.CompileCommandResult>();
+                compileResultsDataGridView.DataSource = new List<CompileCommandResult>();
                 folderBrowserDialog = new VistaFolderBrowserDialog();
                 outputFileDialog = new VistaSaveFileDialog()
                 {
                     AddExtension = true,
-                    Filter = "*.css|*.css"
+                    Filter = @"*.css|*.css"
                 };
             }
             catch (Exception e)
@@ -64,21 +58,23 @@ namespace WinLess
             {
                 Program.Settings.DirectoryList.ClearDirectories();
             }
-            
+
             //load directories specified in arguments
             foreach (string directoryPath in args.DirectoryPaths)
             {
-                if(System.IO.Directory.Exists(directoryPath))
+                if (!System.IO.Directory.Exists(directoryPath))
                 {
-                    Models.Directory directory = Program.Settings.DirectoryList.AddDirectory(directoryPath);
-                    
-                    foreach (Models.File file in directory.Files)
+                    continue;
+                }
+
+                Models.Directory directory = Program.Settings.DirectoryList.AddDirectory(directoryPath);
+
+                foreach (File file in directory.Files)
+                {
+                    file.Minify = args.Minify;
+                    if (args.InitialCompile)
                     {
-                        file.Minify = args.Minify;
-                        if (args.InitialCompile)
-                        {
-                            file.Compile();
-                        }
+                        file.Compile();
                     }
                 }
             }
@@ -89,21 +85,23 @@ namespace WinLess
 
         private void mainForm_Activated(object sender, EventArgs e)
         {
-            if (!this.finishedLoading)
+            if (this.finishedLoading)
             {
-                this.finishedLoading = true;
+                return;
+            }
 
-                if (Program.Settings.StartMinified)
-                {
-                    MinimizeToTray();
-                }
+            this.finishedLoading = true;
+
+            if (Program.Settings.StartMinified)
+            {
+                MinimizeToTray();
             }
         }
 
         private void mainForm_Load(object sender, EventArgs e)
         {
             string[] args = Environment.GetCommandLineArgs();
-            CommandArguments commandLineArgs = new CommandArguments(args);
+            var commandLineArgs = new CommandArguments(args);
             if (commandLineArgs.HasArguments)
             {
                 LoadDirectories(commandLineArgs);
@@ -115,7 +113,7 @@ namespace WinLess
             Program.Settings.SaveSettings();
         }
 
-        #endregion
+        #endregion mainForm init and shutdown
 
         #region filesTabPage
 
@@ -135,10 +133,10 @@ namespace WinLess
 
         private void foldersListBox_DragDrop(object sender, DragEventArgs e)
         {
-            string[] fullPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
+            var fullPaths = (string[])e.Data.GetData(DataFormats.FileDrop);
             foreach (string fullPath in fullPaths)
             {
-                DirectoryInfo directoryInfo = new DirectoryInfo(fullPath);
+                var directoryInfo = new DirectoryInfo(fullPath);
                 if (directoryInfo.Exists && !foldersListBox.Items.Contains(directoryInfo.FullName))
                 {
                     Program.Settings.DirectoryList.AddDirectory(directoryInfo.FullName);
@@ -180,10 +178,9 @@ namespace WinLess
             }
         }
 
-
         private void SelectDirectory()
         {
-            Models.Directory directory = (Models.Directory)foldersListBox.SelectedItem;
+            var directory = (Models.Directory)foldersListBox.SelectedItem;
             if (directory != null)
             {
                 filesDataGridView.DataSource = directory.Files;
@@ -196,7 +193,7 @@ namespace WinLess
             filesDataGridView_DataChanged();
         }
 
-        #endregion
+        #endregion foldersListBox
 
         #region filesDataGridView
 
@@ -226,35 +223,38 @@ namespace WinLess
             rect.X = 10;
             rect.Y = 4;
 
-            CheckBox checkAllFilesCheckbox = new CheckBox();
-            checkAllFilesCheckbox.Name = "checkboxHeader";
-            checkAllFilesCheckbox.Size = new Size(15, 15);
-            checkAllFilesCheckbox.Location = rect.Location;
-            checkAllFilesCheckbox.CheckedChanged += new EventHandler(checkAllFilesCheckbox_CheckedChanged);
+            var checkAllFilesCheckbox = new CheckBox
+            {
+                Name = "checkboxHeader",
+                Size = new Size(15, 15),
+                Location = rect.Location
+            };
+
+            checkAllFilesCheckbox.CheckedChanged += checkAllFilesCheckbox_CheckedChanged;
 
             filesDataGridView.Controls.Add(checkAllFilesCheckbox);
         }
 
         private void checkAllFilesCheckbox_CheckedChanged(object sender, EventArgs e)
         {
-            for (int i = 0; i < filesDataGridView.RowCount; i++)
+            for (var i = 0; i < filesDataGridView.RowCount; i++)
             {
                 filesDataGridView[0, i].Value = ((CheckBox)filesDataGridView.Controls.Find("checkboxHeader", true)[0]).Checked;
             }
             filesDataGridView.EndEdit();
         }
-        
+
         private void filesDataGridView_DataChanged()
         {
-            List<Models.File> files = (List<Models.File>)filesDataGridView.DataSource;
-            files.Sort((x, y) => string.Compare(x.FullPath, y.FullPath));
+            var files = (List<Models.File>)filesDataGridView.DataSource;
+            files.Sort((x, y) => string.CompareOrdinal(x.FullPath, y.FullPath));
             ((CurrencyManager)filesDataGridView.BindingContext[filesDataGridView.DataSource]).Refresh();
-        }  
+        }
 
         private void filesDataGridView_OpenSelectedFile()
         {
             DataGridViewCell cell = filesDataGridView.SelectedCells[0];
-            Models.File file = (Models.File)cell.OwningRow.DataBoundItem;
+            var file = (Models.File)cell.OwningRow.DataBoundItem;
             string filePath;
             if (cell.ColumnIndex == 1)
             {
@@ -267,8 +267,7 @@ namespace WinLess
 
             if (System.IO.File.Exists(filePath))
             {
-                Process process = new Process();
-                process.StartInfo.FileName = filePath;
+                var process = new Process { StartInfo = { FileName = filePath } };
                 process.Start();
             }
         }
@@ -281,7 +280,7 @@ namespace WinLess
         private void fileOpenFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DataGridViewCell cell = filesDataGridView.SelectedCells[0];
-            Models.File file = (Models.File)cell.OwningRow.DataBoundItem;
+            var file = (Models.File)cell.OwningRow.DataBoundItem;
             string filePath;
             if (cell.ColumnIndex == 1)
             {
@@ -292,13 +291,12 @@ namespace WinLess
                 filePath = file.OutputPath;
             }
 
-            FileInfo fileInfo = new FileInfo(filePath);
+            var fileInfo = new FileInfo(filePath);
             string directoryPath = fileInfo.DirectoryName;
 
             if (System.IO.Directory.Exists(directoryPath))
             {
-                Process process = new Process();
-                process.StartInfo.FileName = directoryPath;
+                var process = new Process { StartInfo = { FileName = directoryPath } };
                 process.Start();
             }
         }
@@ -306,20 +304,20 @@ namespace WinLess
         private void fileSelectOutputToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DataGridViewCell cell = filesDataGridView.SelectedCells[0];
-            Models.File file = (Models.File)cell.OwningRow.DataBoundItem;
-            FileInfo fileInfo = new FileInfo(file.OutputPath);
+            var file = (Models.File)cell.OwningRow.DataBoundItem;
+            var fileInfo = new FileInfo(file.OutputPath);
 
-			outputFileDialog.InitialDirectory = fileInfo.DirectoryName;
-			outputFileDialog.FileName = fileInfo.Name;
-			if (outputFileDialog.ShowDialog() == true)
-			{
-				file.OutputPath = outputFileDialog.FileName;
+            outputFileDialog.InitialDirectory = fileInfo.DirectoryName;
+            outputFileDialog.FileName = fileInfo.Name;
+            if (outputFileDialog.ShowDialog() == true)
+            {
+                file.OutputPath = outputFileDialog.FileName;
                 filesDataGridView_DataChanged();
                 Program.Settings.SaveSettings();
-			}
+            }
         }
 
-        #endregion
+        #endregion filesDataGridView
 
         #region Buttons
 
@@ -342,7 +340,7 @@ namespace WinLess
         {
             if (foldersListBox.SelectedItem != null)
             {
-                Models.Directory directory = (Models.Directory)foldersListBox.SelectedItem;
+                var directory = (Models.Directory)foldersListBox.SelectedItem;
                 directory.Refresh();
                 SelectDirectory();
                 Program.Settings.SaveSettings();
@@ -359,15 +357,15 @@ namespace WinLess
             CompileSelectedFiles();
         }
 
-        #endregion
+        #endregion Buttons
 
-        #endregion
+        #endregion filesTabPage
 
         #region compilerTabPage
 
         #region compileResultsDataGridView
-        
-        public void AddCompileResult(Models.CompileCommandResult result)
+
+        public void AddCompileResult(CompileCommandResult result)
         {
             if (InvokeRequired)
             {
@@ -375,11 +373,12 @@ namespace WinLess
                 return;
             }
 
-            if (result.IsSuccess){
+            if (result.IsSuccess)
+            {
                 result.ResultText = "success";
             }
 
-            List<Models.CompileCommandResult> compileResults = (List<Models.CompileCommandResult>)compileResultsDataGridView.DataSource;
+            var compileResults = (List<CompileCommandResult>)compileResultsDataGridView.DataSource;
             compileResults.Insert(0, result);
             compileResultsDataGridView_DataChanged();
 
@@ -387,7 +386,7 @@ namespace WinLess
             {
                 ShowSuccessNotification("Successful compile", result.ResultText);
             }
-            else if(!result.IsSuccess)
+            else if (!result.IsSuccess)
             {
                 ShowErrorNotification("Compile error", result.ResultText);
             }
@@ -398,19 +397,19 @@ namespace WinLess
             ((CurrencyManager)compileResultsDataGridView.BindingContext[compileResultsDataGridView.DataSource]).Refresh();
         }
 
-        #endregion
+        #endregion compileResultsDataGridView
 
         #region Buttons
 
         private void clearCompileResultsButton_Click(object sender, EventArgs e)
         {
-            compileResultsDataGridView.DataSource = new List<Models.CompileCommandResult>();
+            compileResultsDataGridView.DataSource = new List<CompileCommandResult>();
             compileResultsDataGridView_DataChanged();
         }
-        
-        #endregion
 
-        #endregion
+        #endregion Buttons
+
+        #endregion compilerTabPage
 
         #region notifyIcon
 
@@ -454,7 +453,8 @@ namespace WinLess
             this.ShowInTaskbar = true;
         }
 
-        private void ShowSuccessNotification(string title, string message){
+        private void ShowSuccessNotification(string title, string message)
+        {
             notifyIcon.ShowBalloonTip(500, title, message, ToolTipIcon.Info);
         }
 
@@ -473,23 +473,23 @@ namespace WinLess
             Application.Exit();
         }
 
-        #endregion
+        #endregion notifyIcon
 
         #region menu
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            settingsForm form = new settingsForm();
+            var form = new SettingsForm();
             form.ShowDialog(this);
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            aboutForm form = new aboutForm();
+            var form = new AboutForm();
             form.ShowDialog(this);
         }
 
-        #endregion 
+        #endregion menu
 
         #region Helper Methods
 
@@ -499,7 +499,7 @@ namespace WinLess
         private void CompileSelectedFiles()
         {
             // Retrieve list of files from data grid
-            List<Models.File> files = (List<Models.File>)filesDataGridView.DataSource;
+            var files = (List<Models.File>)filesDataGridView.DataSource;
 
             // Compile files one by one
             foreach (Models.File file in files)
@@ -511,6 +511,6 @@ namespace WinLess
             }
         }
 
-        #endregion
+        #endregion Helper Methods
     }
 }

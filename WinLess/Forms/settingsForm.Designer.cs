@@ -1,6 +1,6 @@
 ﻿namespace WinLess
 {
-    partial class settingsForm
+    partial class SettingsForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(settingsForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.generalGroupBox = new System.Windows.Forms.GroupBox();
@@ -157,7 +157,7 @@
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "settingsForm";
+            this.Name = "SettingsForm";
             this.Text = "Settings";
             this.generalGroupBox.ResumeLayout(false);
             this.generalGroupBox.PerformLayout();
