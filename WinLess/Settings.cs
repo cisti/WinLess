@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using WinLess.Helpers;
-using WinLess.Models;
+using WinLessCore.Helpers;
+using WinLessCore.Models;
 
-namespace WinLess
+namespace WinLessCore
 {
     public class Settings
     {
@@ -60,8 +60,8 @@ namespace WinLess
 
         public void SaveSettings()
         {
-            string dataDir = $"{Application.UserAppDataPath}\\data";
-            string settingsFilePath = $"{dataDir}\\settings.xml";
+            string dataDir = $@"{Application.UserAppDataPath}\data";
+            string settingsFilePath = $@"{dataDir}\settings.xml";
 
             try
             {
@@ -90,7 +90,7 @@ namespace WinLess
 
         public static Settings LoadSettings()
         {
-            string path = $"{Application.UserAppDataPath}\\data\\settings.xml";
+            string path = $@"{Application.UserAppDataPath}\data\settings.xml";
 
             if (!System.IO.File.Exists(path))
             {

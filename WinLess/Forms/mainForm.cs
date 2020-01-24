@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using WinLess.Helpers;
-using WinLess.Models;
-using File = WinLess.Models.File;
+using WinLessCore;
+using WinLessCore.Helpers;
+using WinLessCore.Models;
+using Directory = WinLessCore.Models.Directory;
+using File = WinLessCore.Models.File;
 
 namespace WinLess
 {
@@ -49,6 +51,16 @@ namespace WinLess
             {
                 ExceptionHandler.LogException(e);
             }
+        }
+
+        protected override void WndProc(ref Message message)
+        {
+            if (message.Msg == SingleInstance.WM_SHOWFIRSTINSTANCE)
+            {
+                WinApi.ShowToFront(this.Handle);
+            }
+
+            base.WndProc(ref message);
         }
 
         #region Event Handlers
@@ -277,7 +289,7 @@ namespace WinLess
         {
             if (this.foldersListBox.SelectedItem != null)
             {
-                var directory = (Models.Directory)this.foldersListBox.SelectedItem;
+                var directory = (Directory)this.foldersListBox.SelectedItem;
                 directory.Refresh();
                 this.SelectDirectory();
                 Program.Settings.SaveSettings();
@@ -403,7 +415,7 @@ namespace WinLess
                     continue;
                 }
 
-                Models.Directory directory = Program.Settings.DirectoryList.AddDirectory(directoryPath);
+                Directory directory = Program.Settings.DirectoryList.AddDirectory(directoryPath);
 
                 foreach (File file in directory.Files)
                 {
@@ -424,7 +436,7 @@ namespace WinLess
         {
             if (this.foldersListBox.SelectedItem != null)
             {
-                Program.Settings.DirectoryList.RemoveDirectory((Models.Directory)this.foldersListBox.SelectedItem);
+                Program.Settings.DirectoryList.RemoveDirectory((Directory)this.foldersListBox.SelectedItem);
                 this.foldersListBox_DataChanged();
                 this.filesDataGridView.DataSource = new List<File>();
                 this.filesDataGridView_DataChanged();
@@ -434,7 +446,7 @@ namespace WinLess
 
         private void SelectDirectory()
         {
-            var directory = (Models.Directory)this.foldersListBox.SelectedItem;
+            var directory = (Directory)this.foldersListBox.SelectedItem;
             if (directory != null)
             {
                 this.filesDataGridView.DataSource = directory.Files;

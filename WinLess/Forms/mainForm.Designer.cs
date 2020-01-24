@@ -1,4 +1,6 @@
-﻿namespace WinLess
+﻿using WinLessCore.Models;
+
+namespace WinLess
 {
     partial class MainForm
     {
@@ -91,7 +93,7 @@
             // 
             // directoryBindingSource
             // 
-            this.directoryBindingSource.DataSource = typeof(WinLess.Models.Directory);
+            this.directoryBindingSource.DataSource = typeof(Directory);
             // 
             // menu
             // 
@@ -136,7 +138,7 @@
             // 
             // fileBindingSource
             // 
-            this.fileBindingSource.DataSource = typeof(WinLess.Models.File);
+            this.fileBindingSource.DataSource = typeof(File);
             // 
             // fileContextMenuStrip
             // 
@@ -449,7 +451,7 @@
             // 
             // compileResultBindingSource
             // 
-            this.compileResultBindingSource.DataSource = typeof(WinLess.Models.CompileCommandResult);
+            this.compileResultBindingSource.DataSource = typeof(CompileCommandResult);
             // 
             // notifyIcon
             // 

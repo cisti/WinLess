@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using WinLess.Helpers;
+using WinLessCore.Helpers;
 
-namespace WinLess.Models
+namespace WinLessCore.Models
 {
     public class DirectoryList
     {
         private List<FileSystemWatcher> fileSystemWatchers;
-        private string previousFileChangedPath = null;
+        private string previousFileChangedPath;
         private DateTime previousFileChangedTime = DateTime.Now;
 
         public List<Directory> Directories { get; set; }
@@ -29,14 +29,16 @@ namespace WinLess.Models
         {
             Directory directory = this.GetDirectory(path);
 
-            if (directory == null)
+            if (directory != null)
             {
-                directory = new Directory(path);
-                this.Directories.Add(directory);
-                this.AddWatcher(directory);
-                Program.Settings.SaveSettings();
-                this.CheckAllFilesForImports();
+                return directory;
             }
+
+            directory = new Directory(path);
+            this.Directories.Add(directory);
+            this.AddWatcher(directory);
+            Program.Settings.SaveSettings();
+            this.CheckAllFilesForImports();
 
             return directory;
         }
@@ -195,12 +197,14 @@ namespace WinLess.Models
             {
                 File file = Program.Settings.DirectoryList.GetFile(e.FullPath);
 
-                if (file != null)
+                if (file == null)
                 {
-                    file.Compile();
-                    this.previousFileChangedPath = file.FullPath;
-                    this.previousFileChangedTime = DateTime.Now;
+                    return;
                 }
+
+                file.Compile();
+                this.previousFileChangedPath = file.FullPath;
+                this.previousFileChangedTime = DateTime.Now;
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WinLess.Models
+namespace WinLessCore.Models
 {
     public class CommandResult
     {

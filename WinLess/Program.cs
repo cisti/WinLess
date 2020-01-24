@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Forms;
-using WinLess.Models;
+using WinLess;
+using WinLessCore.Helpers;
+using WinLessCore.Models;
 
-namespace WinLess
+namespace WinLessCore
 {
     internal static class Program
     {
@@ -21,10 +24,18 @@ namespace WinLess
                 return;
             }
 
+            if (!SingleInstance.Start())
+            {
+                SingleInstance.ShowFirstInstance();
+                return;
+            }
+
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
+
+            SingleInstance.Stop();
         }
     }
 }

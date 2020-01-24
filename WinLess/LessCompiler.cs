@@ -2,10 +2,11 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using WinLess.Helpers;
-using WinLess.Models;
+using WinLess;
+using WinLessCore.Helpers;
+using WinLessCore.Models;
 
-namespace WinLess
+namespace WinLessCore
 {
     public static class LessCompiler
     {

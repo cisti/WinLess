@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 
-namespace WinLess.Helpers
+namespace WinLessCore.Helpers
 {
     public class AutoStartUtil
     {
@@ -27,7 +27,7 @@ namespace WinLess.Helpers
         {
             RegistryKey key = Registry.CurrentUser.OpenSubKey(RUN_LOCATION);
 
-            var value = (string)key?.GetValue(keyName);
+            string value = (string)key?.GetValue(keyName);
 
             if (value == null)
             {

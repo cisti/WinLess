@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 
-namespace WinLess.Helpers
+namespace WinLessCore.Helpers
 {
     internal static class ExceptionHandler
     {

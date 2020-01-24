@@ -1,4 +1,4 @@
-﻿namespace WinLess.Models
+﻿namespace WinLessCore.Models
 {
     public class CompileCommandResult : CommandResult
     {

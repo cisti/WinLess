@@ -1,8 +1,9 @@
-﻿using NDesk.Options;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using NDesk.Options;
 
-namespace WinLess.Models
+namespace WinLessCore.Models
 {
     public class CommandArguments
     {
@@ -92,13 +93,13 @@ namespace WinLess.Models
         public bool Minify { get; set; }
         public bool ShowHelp { get; set; }
         public List<string> DirectoryPaths { get; set; }
-        
+
         #region Console Dll imports
 
-        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll")]
         private static extern bool AllocConsole();
 
-        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll")]
         private static extern bool AttachConsole(int pid);
 
         #endregion Console Dll imports

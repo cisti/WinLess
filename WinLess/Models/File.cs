@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
-using WinLess.Helpers;
+using WinLessCore.Helpers;
 
-namespace WinLess.Models
+namespace WinLessCore.Models
 {
     public class File
     {

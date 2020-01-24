@@ -1,9 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
+    <AssemblyName>WinLessCore</AssemblyName>
+    <RootNamespace>WinLessCore</RootNamespace>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <Version>2.0.0</Version>
+    <Version>3.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,44 +18,38 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Update="Forms\AboutForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Forms\AboutForm.Designer.cs">
-      <DependentUpon>AboutForm.cs</DependentUpon>
-    </Compile>
     <Compile Update="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Update="Forms\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+
+    <Compile Update="Forms\AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Forms\AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+
     <Compile Update="Forms\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Content Include="node_modules\**\*.*" />
+    <EmbeddedResource Update="Forms\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+
     <None Update="lessc.cmd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Forms\AboutForm.resx">
-      <DependentUpon>AboutForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Forms\MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Forms\SettingsForm.resx">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <PropertyGroup>
-    <PostBuildEvent>ROBOCOPY "$(ProjectDir)node_modules" "$(TargetDir)node_modules" * /COPYALL /S
-EXIT 0</PostBuildEvent>
-  </PropertyGroup>
 </Project>

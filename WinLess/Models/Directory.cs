@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace WinLess.Models
+namespace WinLessCore.Models
 {
     public class Directory
     {
@@ -69,7 +69,7 @@ namespace WinLess.Models
 
         public bool ContainsFile(string fullPath)
         {
-            var result = false;
+            bool result = false;
             foreach (File file in this.Files)
             {
                 if (string.Compare(file.FullPath, fullPath, StringComparison.InvariantCultureIgnoreCase) == 0)
