@@ -8,28 +8,17 @@ namespace WinLessCore
 {
     public class Settings
     {
-        public Settings()
-        {
-            this.DirectoryList = new DirectoryList();
-            this.DefaultMinify = true;
-            this.CompileOnSave = true;
-            this.ShowSuccessMessages = false;
-            this.StartWithWindows = true;
-            this.StartMinified = false;
-            this.UseGloballyInstalledLess = false;
-        }
-
-        public DirectoryList DirectoryList { get; set; }
+        public bool CompileOnSave { get; set; }
 
         public bool DefaultMinify { get; set; }
-
-        public bool CompileOnSave { get; set; }
 
         public bool ShowSuccessMessages { get; set; }
 
         public bool StartMinified { get; set; }
 
         public bool UseGloballyInstalledLess { get; set; }
+
+        public DirectoryList DirectoryList { get; set; }
 
         private bool startWithWindows;
 
@@ -43,19 +32,16 @@ namespace WinLessCore
             }
         }
 
-        private void ApplyStartWithWindows()
+        public Settings()
         {
-            const string keyName = "WinLess";
-            string assemblyLocation = Application.ExecutablePath;
+            this.CompileOnSave = true;
+            this.DefaultMinify = true;
+            this.ShowSuccessMessages = false;
+            this.StartMinified = false;
+            this.StartWithWindows = true;
+            this.UseGloballyInstalledLess = false;
 
-            if (this.StartWithWindows && !AutoStartUtil.IsAutoStartEnabled(keyName, assemblyLocation))
-            {
-                AutoStartUtil.SetAutoStart(keyName, assemblyLocation);
-            }
-            else if (!this.StartWithWindows && AutoStartUtil.IsAutoStartEnabled(keyName, assemblyLocation))
-            {
-                AutoStartUtil.UnSetAutoStart(keyName);
-            }
+            this.DirectoryList = new DirectoryList();
         }
 
         public void SaveSettings()
@@ -108,6 +94,22 @@ namespace WinLessCore
             catch
             {
                 return new Settings();
+            }
+        }
+
+        private void ApplyStartWithWindows()
+        {
+            const string keyName = "WinLess";
+            string assemblyLocation = Application.ExecutablePath;
+
+            if (this.StartWithWindows && !AutoStartUtil.IsAutoStartEnabled(keyName, assemblyLocation))
+            {
+                AutoStartUtil.SetAutoStart(keyName, assemblyLocation);
+            }
+
+            if (!this.StartWithWindows && AutoStartUtil.IsAutoStartEnabled(keyName, assemblyLocation))
+            {
+                AutoStartUtil.UnSetAutoStart(keyName);
             }
         }
     }

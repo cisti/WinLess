@@ -27,9 +27,9 @@ namespace WinLessCore.Helpers
         {
             RegistryKey key = Registry.CurrentUser.OpenSubKey(RUN_LOCATION);
 
-            string value = (string)key?.GetValue(keyName);
+            string? value = key?.GetValue(keyName).ToString();
 
-            if (value == null)
+            if (value is null)
             {
                 return false;
             }

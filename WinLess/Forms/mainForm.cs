@@ -4,13 +4,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using WinLessCore;
 using WinLessCore.Helpers;
 using WinLessCore.Models;
 using Directory = WinLessCore.Models.Directory;
 using File = WinLessCore.Models.File;
 
-namespace WinLess
+namespace WinLessCore.Forms
 {
     public partial class MainForm : Form
     {

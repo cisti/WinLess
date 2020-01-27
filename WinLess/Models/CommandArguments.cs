@@ -7,6 +7,14 @@ namespace WinLessCore.Models
 {
     public class CommandArguments
     {
+        public bool ClearDirectories { get; set; }
+        public bool ConsoleExit { get; set; }
+        public bool HasArguments { get; set; }
+        public bool InitialCompile { get; set; }
+        public bool Minify { get; set; }
+        public bool ShowHelp { get; set; }
+        public List<string> DirectoryPaths { get; set; }
+
         public CommandArguments(string[] args)
         {
             this.ClearDirectories = false;
@@ -15,13 +23,12 @@ namespace WinLessCore.Models
             this.InitialCompile = false;
             this.Minify = false;
             this.ShowHelp = false;
+            this.DirectoryPaths = new List<string>();
 
             if (!this.HasArguments)
             {
                 return;
             }
-
-            this.DirectoryPaths = new List<string>();
 
             var optionSet = new OptionSet
             {
@@ -85,14 +92,6 @@ namespace WinLessCore.Models
             Console.WriteLine(@"Example usage: WinLess.exe -d ""C:\projects\project1"" -d ""C:\projects\project2"" --minify --compile --clear");
             this.ConsoleExit = true;
         }
-
-        public bool ClearDirectories { get; set; }
-        public bool ConsoleExit { get; set; }
-        public bool HasArguments { get; set; }
-        public bool InitialCompile { get; set; }
-        public bool Minify { get; set; }
-        public bool ShowHelp { get; set; }
-        public List<string> DirectoryPaths { get; set; }
 
         #region Console Dll imports
 

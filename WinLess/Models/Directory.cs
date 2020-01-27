@@ -6,19 +6,11 @@ namespace WinLessCore.Models
 {
     public class Directory
     {
-        #region Constructor
-
-        private Directory()
-        {
-        }
-
         public Directory(string path)
         {
             this.FullPath = path;
             this.LoadFiles();
         }
-
-        #endregion Constructor
 
         #region Properties
 
@@ -52,6 +44,7 @@ namespace WinLessCore.Models
         public void Refresh()
         {
             var removedFiles = new List<File>();
+
             foreach (File file in this.Files)
             {
                 if (!System.IO.File.Exists(file.FullPath))
@@ -97,9 +90,10 @@ namespace WinLessCore.Models
                 FileInfo[] files = directoryInfo.GetFiles();
                 foreach (FileInfo file in files)
                 {
-                    if ((string.Compare(file.Extension, ".less", StringComparison.InvariantCultureIgnoreCase) == 0 ||
-                        (string.Compare(file.Extension, ".css", StringComparison.InvariantCultureIgnoreCase) == 0) && file.Name.Contains(".less")
-                       ) && !this.ContainsFile(file.FullName))
+                    if (
+                        (string.Compare(file.Extension, ".less", StringComparison.InvariantCultureIgnoreCase) == 0 ||
+                         string.Compare(file.Extension, ".css", StringComparison.InvariantCultureIgnoreCase) == 0 && file.Name.Contains(".less"))
+                        && !this.ContainsFile(file.FullName))
                     {
                         this.Files.Add(new File(this, file.FullName));
                     }

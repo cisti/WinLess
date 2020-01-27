@@ -1,6 +1,6 @@
 ﻿using WinLessCore.Models;
 
-namespace WinLess
+namespace WinLessCore.Forms
 {
     partial class MainForm
     {

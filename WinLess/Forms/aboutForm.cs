@@ -1,7 +1,6 @@
 ﻿using System.Windows.Forms;
-using WinLessCore;
 
-namespace WinLess
+namespace WinLessCore.Forms
 {
     public partial class AboutForm : Form
     {
@@ -18,7 +17,7 @@ namespace WinLess
             string version = Application.ProductVersion;
 
             // return the ProductVersion without the last '.0'
-            return version.Substring(0, version.Length - 2);
+            return version[..^2];
         }
     }
 }

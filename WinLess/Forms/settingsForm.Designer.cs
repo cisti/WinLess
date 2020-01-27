@@ -1,4 +1,4 @@
-﻿namespace WinLess
+﻿namespace WinLessCore.Forms
 {
     partial class SettingsForm
     {

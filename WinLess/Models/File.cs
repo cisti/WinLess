@@ -9,13 +9,6 @@ namespace WinLessCore.Models
 {
     public class File
     {
-        #region Constructor
-
-        private File()
-        {
-            this.ParentFiles = new List<File>();
-        }
-
         public File(Directory directory, string fullPath)
         {
             this.FullPath = fullPath;
@@ -27,13 +20,11 @@ namespace WinLessCore.Models
             this.CheckForImports();
         }
 
-        #endregion Constructor
-
         #region Properties
 
         public string FullPath { get; set; }
 
-        public string DirectoryPath => Path.GetDirectoryName(this.FullPath);
+        public string? DirectoryPath => Path.GetDirectoryName(this.FullPath);
 
         public string ProjectDirectoryPath { get; set; }
 
@@ -147,39 +138,42 @@ namespace WinLessCore.Models
         {
             var lessImportPaths = new List<string>();
             string fileText = this.GetFileText();
-            if (!string.IsNullOrEmpty(fileText))
+
+            if (string.IsNullOrWhiteSpace(fileText))
             {
-                // find the @imports using regex
-                MatchCollection matches = Regex.Matches(fileText, "@import\\s*(?:url\\()?\\s*[\"\\']?([^\"\\'\\);]+)[\"\\']?\\s*\\)?\\s*;");
+                return lessImportPaths;
+            }
 
-                foreach (Match match in matches)
+            // find the @imports using regex
+            MatchCollection importMatches = Regex.Matches(fileText, "@import\\s*(?:url\\()?\\s*[\"\\']?([^\"\\'\\);]+)[\"\\']?\\s*\\)?\\s*;");
+
+            foreach (Match? match in importMatches)
+            {
+                if (match?.Groups.Count > 1)
                 {
-                    if (match.Groups.Count > 1)
+                    string cssImportValue = match.Groups[1].Value;
+
+                    // if the import is a .less import
+                    if (!cssImportValue.EndsWith(".css", StringComparison.InvariantCultureIgnoreCase) ||
+                         cssImportValue.EndsWith(".less.css", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        string cssImportValue = match.Groups[1].Value;
+                        string relativeImportPath = cssImportValue.Replace("/", @"\");
 
-                        // if the import is a .less import
-                        if (!cssImportValue.EndsWith(".css", StringComparison.InvariantCultureIgnoreCase) ||
-                            cssImportValue.EndsWith(".less.css", StringComparison.InvariantCultureIgnoreCase))
+                        // if the import doesn't include the .less extension
+                        if (!cssImportValue.EndsWith(".less.css", StringComparison.InvariantCultureIgnoreCase) &&
+                            !cssImportValue.EndsWith(".less", StringComparison.InvariantCultureIgnoreCase))
                         {
-                            string relativeImportPath = cssImportValue.Replace("/", "\\");
+                            relativeImportPath = $"{relativeImportPath}.less";
+                        }
 
-                            // if the import doesn't include the .less extension
-                            if (!cssImportValue.EndsWith(".less.css", StringComparison.InvariantCultureIgnoreCase) &&
-                                !cssImportValue.EndsWith(".less", StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                relativeImportPath = $"{relativeImportPath}.less";
-                            }
-
-                            try
-                            {
-                                string fullImportPath = Path.GetFullPath($"{this.DirectoryPath}\\{relativeImportPath}");
-                                lessImportPaths.Add(fullImportPath);
-                            }
-                            catch
-                            {
-                                //invalid path, ignore this here
-                            }
+                        try
+                        {
+                            string fullImportPath = Path.GetFullPath($@"{this.DirectoryPath}\{relativeImportPath}");
+                            lessImportPaths.Add(fullImportPath);
+                        }
+                        catch
+                        {
+                            //invalid path, ignore this here
                         }
                     }
                 }
@@ -190,7 +184,8 @@ namespace WinLessCore.Models
 
         private string GetFileText()
         {
-            string fileText = null;
+            string fileText = string.Empty;
+
             try
             {
                 var streamReader = new StreamReader(this.FullPath);

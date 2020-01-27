@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using WinLess;
+using WinLessCore.Forms;
 using WinLessCore.Helpers;
 using WinLessCore.Models;
 

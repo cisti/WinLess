@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-using WinLessCore;
 
-namespace WinLess
+namespace WinLessCore.Forms
 {
     public partial class SettingsForm : Form
     {
