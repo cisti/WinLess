@@ -1,12 +1,10 @@
-# WinLess
-[http://winless.org](http://winless.org)
+# WinLess Core
 
-WinLess is written with C#.NET using Visual Studio 2010.
+WinLessCore is a fork of the popular WinLess application [http://winless.org](http://winless.org) that has been ported to use .NET Core 3.1
 
-The installer is created using [War Setup](http://sourceforge.net/projects/warsetup/)
-
-## Project status and future
-Read [this issue](https://github.com/marklagendijk/WinLess/issues/116) for an explanation of the projects' status and future. Read this before opening any issue.
+## Purpose & Intention
+The scope of this fork was for me to use this tool as an opportunity to play around with the latest .NET Core 3 release using WinForms and see what a migration process would imply.
+My future intentions are to fix some previusly reported issues in the original repository and keep the application and dependencies up to date whenever I have some spare time :)
 
 ## Using a globally installed less
 To use a globally installed LESS, instead of the one bundled with WinLess, you should follow the following steps:
