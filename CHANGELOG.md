@@ -1,4 +1,9 @@
 ## Changelog
+
+### 3.0.0-alpha
+- Ported to .NET Core 3.1
+- TBD
+
 ### 1.9.1
 - Updated less.js to 2.1.2
 
